@@ -1,10 +1,26 @@
-<div class="blog-post">
-    <h2 class="blog-post-title"><a href="/posts/{{ $article->slug }}">{{ $article->name }}</a></h2>
-    <p class="blog-post-meta">{{ date("d.m.Y H:i:s", strtotime($article->updated_at)) }}</p>
+<div class="blog-post card mb-3">
+    <div class="card-header clearfix">
+        <a href="/posts/{{ $article->slug }}">{{ $article->name }}</a>
+        <span class="blog-post-meta float-right">{{ date("d.m.Y H:i:s", strtotime($article->updated_at)) }}</span>
+    </div>
+    <div class="card-body position-relative p-3">
+            @if ($article->tags->isNotEmpty())
+                <div>
+                    @foreach($article->tags as $tag)
+                        <a href="" class="btn btn-{{ $tag->getBootstrapClass() }} btn-sm">{{ $tag->name }}</a>
+                    @endforeach
+                </div>
+            @endif
+        <div class="position-absolute clearfix" style="top: 0;right: 0;">
+            <a href="/posts/{{ $article->slug }}/edit" class="btn btn-primary float-right m-2">Изменить</a>
+        </div>
 
-    <p>{{ $article->annotation }}</p>
-    <hr>
-    <div>
-        {{ $article->description }}
+        <div class="my-3">
+            <p>{{ $article->annotation }}</p>
+        </div>
+        <hr>
+        <div>
+            {{ $article->description }}
+        </div>
     </div>
 </div>

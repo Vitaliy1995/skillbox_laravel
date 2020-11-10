@@ -17,7 +17,7 @@
                 Самые новые публикации
             </h3>
 
-            <a href="/posts/create" class="btn btn-primary btn-lg btn-block">Добавить статью</a>
+            <a href="/posts/create" class="btn btn-primary btn-lg btn-block mb-3">Добавить статью</a>
 
             @if (count($articles) > 0)
                 @foreach($articles as $article)

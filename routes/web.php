@@ -15,24 +15,16 @@ use App\Http\Controllers\TreatmentController;
 |
 */
 
-Route::get('/', 'ArticleController@index');
+Route::get('/posts/tags/{tag}', 'TagsController@index');
 
-Route::get('/posts/create', function () {
-    return view('posts.create');
-});
-
-Route::post('/posts', 'ArticleController@create');
-
-Route::get('/posts/{article}', 'ArticleController@detail');
+Route::resource('/posts', 'ArticleController')->parameters([
+    'posts' => 'article'
+]);
 
 Route::get('/admin/feedbacks', 'TreatmentController@index');
 
-Route::get('/about', function () {
-    return view('about');
-});
+Route::view('/about', 'about');
 
-Route::get('/contacts', function () {
-    return view('contacts');
-});
+Route::view('/contacts', 'contacts');
 
 Route::post('/contacts', 'TreatmentController@add');
