@@ -4,16 +4,19 @@
         <span class="blog-post-meta float-right">{{ date("d.m.Y H:i:s", strtotime($article->updated_at)) }}</span>
     </div>
     <div class="card-body position-relative p-3">
-            @if ($article->tags->isNotEmpty())
-                <div>
-                    @foreach($article->tags as $tag)
-                        <a href="" class="btn btn-{{ $tag->getBootstrapClass() }} btn-sm">{{ $tag->name }}</a>
-                    @endforeach
-                </div>
-            @endif
-        <div class="position-absolute clearfix" style="top: 0;right: 0;">
-            <a href="/posts/{{ $article->slug }}/edit" class="btn btn-primary float-right m-2">Изменить</a>
-        </div>
+        @if ($article->tags->isNotEmpty())
+            <div>
+                @foreach($article->tags as $tag)
+                    <a href="" class="btn btn-{{ $tag->getBootstrapClass() }} btn-sm">{{ $tag->name }}</a>
+                @endforeach
+            </div>
+        @endif
+
+        @can('update', $article)
+            <div class="position-absolute clearfix" style="top: 0;right: 0;">
+                <a href="/posts/{{ $article->slug }}/edit" class="btn btn-primary float-right m-2">Изменить</a>
+            </div>
+        @endcan
 
         <div class="my-3">
             <p>{{ $article->annotation }}</p>

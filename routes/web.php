@@ -28,3 +28,5 @@ Route::view('/about', 'about');
 Route::view('/contacts', 'contacts');
 
 Route::post('/contacts', 'TreatmentController@add');
+
+Auth::routes();

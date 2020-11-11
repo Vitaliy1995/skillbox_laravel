@@ -9,6 +9,12 @@ use mysql_xdevapi\Collection;
 
 class ArticleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('can:update,article')->except(['index', 'show', 'create', 'store']);
+    }
+
     public function index()
     {
         $articles = Article::with('tags')
@@ -37,6 +43,8 @@ class ArticleController extends Controller
             $validatedData['published'] = true;
         }
 
+        $validatedData['owner_id'] = auth()->id();
+
         Article::create($validatedData);
 
         return redirect("/posts");
@@ -49,6 +57,8 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
+        $this->authorize('update', $article);
+
         return view("posts.edit", compact('article'));
     }
 

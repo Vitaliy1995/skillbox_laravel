@@ -4,7 +4,7 @@ namespace App;
 
 class Article extends \Illuminate\Database\Eloquent\Model
 {
-    public $fillable = ['slug', 'name', 'annotation', 'description'];
+    public $fillable = ['slug', 'name', 'annotation', 'description', 'owner_id', 'published'];
 
     public function getRouteKeyName()
     {
