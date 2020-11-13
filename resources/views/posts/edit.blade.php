@@ -43,6 +43,15 @@
                         <label for="description">Текст статьи</label>
                         <textarea name="description" id="description" class="col-md-12" rows="10" required>{{ $article->description }}</textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="tags">Теги статьи</label>
+                        <input type="text"
+                               name="tags"
+                               id="tags"
+                               class="form-control"
+                               value="{{ old('tags', $article->tags->pluck('name')->implode(',')) }}"
+                        />
+                    </div>
                     <div class="form-group form-check">
                         <input type="checkbox"
                                class="form-check-input"
@@ -53,15 +62,6 @@
                                @endif
                         >
                         <label class="form-check-label" for="published">Опубликовано</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="tags">Текст статьи</label>
-                        <input type="text"
-                               name="tags"
-                               id="tags"
-                               class="form-control"
-                               value="{{ old('tags', $article->tags->pluck('name')->implode(',')) }}"
-                        />
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>

@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Tag;
-use Illuminate\Http\Request;
-use mysql_xdevapi\Collection;
 
 class ArticleController extends Controller
 {
@@ -45,7 +43,11 @@ class ArticleController extends Controller
 
         $validatedData['owner_id'] = auth()->id();
 
-        Article::create($validatedData);
+        $article = Article::create($validatedData);
+
+        $this->syncTagsWithArticle($article, \request('tags'));
+
+        flash('Статья создана успешно!');
 
         return redirect("/posts");
     }
@@ -74,9 +76,27 @@ class ArticleController extends Controller
 
         $article->update($validatedData);
 
+        $this->syncTagsWithArticle($article, \request('tags'));
+
+        flash('Статья успешно обновлена!');
+
+        return redirect("/posts");
+    }
+
+    public function destroy(Article $article)
+    {
+        $article->delete();
+
+        flash('Статья успешно удалена!', 'warning');
+
+        return redirect("/posts");
+    }
+
+    private function syncTagsWithArticle(Article $article, $tags)
+    {
         /** @var \Illuminate\Support\Collection $articleTags */
         $articleTags = $article->tags->keyBy('name');
-        $formTags = collect(explode(",", \request('tags')))->keyBy(function ($item) {return $item;});
+        $formTags = collect(explode(",", $tags))->keyBy(function ($item) {return $item;});
 
         $syncIds = $articleTags->intersectByKeys($formTags)->pluck('id')->toArray();
 
@@ -87,13 +107,5 @@ class ArticleController extends Controller
         }
 
         $article->tags()->sync($syncIds);
-
-        return redirect("/posts");
-    }
-
-    public function destroy(Article $article)
-    {
-        $article->delete();
-        return redirect("/posts");
     }
 }

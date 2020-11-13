@@ -13,6 +13,9 @@
     </div>
     <div class="row">
         <div class="col-md-8 blog-main">
+
+            @include('layouts.flash_message')
+
             <h3 class="pb-3 mb-4 font-italic border-bottom">
                 Самые новые публикации
             </h3>
