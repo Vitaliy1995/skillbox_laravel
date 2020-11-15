@@ -1,9 +1,9 @@
 @component('mail::message')
-    # Добавлена статья
+    # {{ $event }} статья
     Код: {{ $article->slug }}<br>
     Название: {{ $article->name }}
 
-    @component('mail::button', ['url' => "/posts/{$article->slug}"])
+    @component('mail::button', ['url' => route('posts.show', ['article' => $article->slug])])
     Посмотреть статью
     @endcomponent
 

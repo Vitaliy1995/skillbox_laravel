@@ -11,7 +11,7 @@
 
         <div class="row">
             <div class="col-md-8 blog-main">
-                <form method="post" action="/posts/{{ $article->slug }}">
+                <form method="post" action="{{ route('posts.update', ['article' => $article->slug]) }}">
 
                     @csrf
                     @method('PATCH')
@@ -66,7 +66,7 @@
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
 
-                <form method="post" action="/posts/{{ $article->slug }}" class>
+                <form method="post" action="{{ route('posts.destroy', ['article' => $article->slug]) }}" class>
 
                     @csrf
                     @method('DELETE')

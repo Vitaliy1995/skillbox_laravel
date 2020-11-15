@@ -10,7 +10,7 @@
         @include('layouts.errors')
 
         <div class="row">
-            <form method="post" action="/posts" class="col-md-8 blog-main">
+            <form method="post" action="{{ route('posts.store') }}" class="col-md-8 blog-main">
 
                 @csrf
 

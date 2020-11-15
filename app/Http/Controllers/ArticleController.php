@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Http\Requests\ArticlePostRequest;
 use App\Tag;
 
 class ArticleController extends Controller
@@ -28,16 +29,11 @@ class ArticleController extends Controller
         return view('posts.create');
     }
 
-    public function store()
+    public function store(ArticlePostRequest $request)
     {
-        $validatedData = \request()->validate([
-            "slug" => "regex:/^([a-zA-Z]{1})([\w\-\_]*)([\w]{1})$/i|unique:articles,slug|required",
-            "name" => "min:5|max:100|required",
-            "annotation" => "max:255|required",
-            "description" => "required",
-        ]);
+        $validatedData = $request->validated();
 
-        if (\request('published')) {
+        if (\request()->has('published')) {
             $validatedData['published'] = true;
         }
 
@@ -64,15 +60,11 @@ class ArticleController extends Controller
         return view("posts.edit", compact('article'));
     }
 
-    public function update(Article $article)
+    public function update(Article $article, ArticlePostRequest $request)
     {
-        $validatedData = \request()->validate([
-            "name" => "min:5|max:100|required",
-            "annotation" => "max:255|required",
-            "description" => "required",
-        ]);
+        $validatedData = $request->validated();
 
-        $validatedData['published'] = (bool)(\request('published'));
+        $validatedData['published'] = \request()->has('published');
 
         $article->update($validatedData);
 

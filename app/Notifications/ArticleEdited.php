@@ -14,6 +14,9 @@ class ArticleEdited extends ArticleNotification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->markdown('mail.article-edit', ['article' => $this->article]);
+        return (new MailMessage)->markdown('mail.article-edit', [
+            'article' => $this->article,
+            'event' => 'Обновлена'
+        ]);
     }
 }

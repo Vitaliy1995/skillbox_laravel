@@ -15,18 +15,18 @@ use App\Http\Controllers\TreatmentController;
 |
 */
 
-Route::get('/posts/tags/{tag}', 'TagsController@index');
+Route::get('/posts/tags/{tag}', 'TagsController@index')->name('posts.tags');
 
 Route::resource('/posts', 'ArticleController')->parameters([
     'posts' => 'article'
 ]);
 
-Route::get('/admin/feedbacks', 'TreatmentController@index');
+Route::get('/admin/feedbacks', 'TreatmentController@index')->name('admin.feedback');
 
-Route::view('/about', 'about');
+Route::view('/about', 'about')->name('about');
 
-Route::view('/contacts', 'contacts');
+Route::view('/contacts', 'contacts')->name('contacts');
 
-Route::post('/contacts', 'TreatmentController@add');
+Route::post('/contacts', 'TreatmentController@add')->name('contacts.add');
 
 Auth::routes();
