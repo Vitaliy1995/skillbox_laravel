@@ -45,7 +45,7 @@ class ArticleController extends Controller
 
         flash('Статья создана успешно!');
 
-        return redirect("/posts");
+        return redirect(route('posts.index'));
     }
 
     public function show(Article $article)
@@ -72,7 +72,7 @@ class ArticleController extends Controller
 
         flash('Статья успешно обновлена!');
 
-        return redirect("/posts");
+        return redirect(route('posts.index'));
     }
 
     public function destroy(Article $article)
@@ -81,7 +81,7 @@ class ArticleController extends Controller
 
         flash('Статья успешно удалена!', 'warning');
 
-        return redirect("/posts");
+        return redirect(route('posts.index'));
     }
 
     private function syncTagsWithArticle(Article $article, $tags)

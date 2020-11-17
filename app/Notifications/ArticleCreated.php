@@ -14,7 +14,7 @@ class ArticleCreated extends ArticleNotification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->markdown('mail.article-created', [
+        return (new MailMessage)->markdown('mail.article-update', [
             'article' => $this->article,
             'event' => 'Создана'
         ]);

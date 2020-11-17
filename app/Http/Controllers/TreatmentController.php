@@ -23,6 +23,6 @@ class TreatmentController extends Controller
 
         Treatment::create($validatedData);
 
-        return redirect("/contacts");
+        return redirect(route('contacts'));
     }
 }
