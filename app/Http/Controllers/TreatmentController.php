@@ -21,8 +21,8 @@ class TreatmentController extends Controller
             "message" => "required",
         ]);
 
-        Treatment::create(\request()->all());
+        Treatment::create($validatedData);
 
-        return redirect("/contacts");
+        return redirect(route('contacts'));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Treatment extends Model
+class Treatment extends \Illuminate\Database\Eloquent\Model
 {
-    //
+    public $fillable = ['email', 'message'];
 }

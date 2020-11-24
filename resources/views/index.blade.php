@@ -13,11 +13,14 @@
     </div>
     <div class="row">
         <div class="col-md-8 blog-main">
+
+            @include('layouts.flash_message')
+
             <h3 class="pb-3 mb-4 font-italic border-bottom">
                 Самые новые публикации
             </h3>
 
-            <a href="/posts/create" class="btn btn-primary btn-lg btn-block">Добавить статью</a>
+            <a href="{{ route('posts.create') }}" class="btn btn-primary btn-lg btn-block mb-3">Добавить статью</a>
 
             @if (count($articles) > 0)
                 @foreach($articles as $article)

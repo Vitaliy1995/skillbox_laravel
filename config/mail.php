@@ -106,4 +106,5 @@ return [
         ],
     ],
 
+    'admin_mail' => 'shevchukvitalik@bk.ru'
 ];

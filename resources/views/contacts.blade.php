@@ -13,7 +13,7 @@
         @include('layouts.errors')
 
         <h2>Оставьте отзыв</h2>
-        <form method="post" action="/contacts" style="width: 200px;">
+        <form method="post" action="{{ route('contacts.add') }}" style="width: 200px;">
 
             @csrf
 
