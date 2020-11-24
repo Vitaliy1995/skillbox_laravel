@@ -19,7 +19,7 @@
                     <input type="text" class="form-control" id="slug" name="slug" value="{{ old('slug') }}" required>
                 </div>
 
-                @include('posts.layouts.form-inputs')
+                @include('posts.layouts.form-inputs', ['article' => new \App\Article()])
             </form>
 
             @include('layouts.right_menu')

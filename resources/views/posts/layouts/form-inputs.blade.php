@@ -6,7 +6,7 @@
            name="name"
            minlength="5"
            maxlength="100"
-           value="{{ old('name', isset($article) ? $article->name : '') }}"
+           value="{{ old('name', $article->name) }}"
            required
     >
 </div>
@@ -17,13 +17,13 @@
            id="annotation"
            name="annotation"
            maxlength="255"
-           value="{{ old('annotation', isset($article) ? $article->annotation : '') }}"
+           value="{{ old('annotation', $article->annotation) }}"
            required
     >
 </div>
 <div class="form-group">
     <label for="description">Текст статьи</label>
-    <textarea name="description" id="description" class="col-md-12" rows="10" required>{{ isset($article) ? $article->description : '' }}</textarea>
+    <textarea name="description" id="description" class="col-md-12" rows="10" required>{{ old('description',  $article->description) }}</textarea>
 </div>
 <div class="form-group">
     <label for="tags">Теги статьи</label>
@@ -31,7 +31,7 @@
            name="tags"
            id="tags"
            class="form-control"
-           value="{{ old('tags', isset($article) ? $article->tags->pluck('name')->implode(',') : '') }}"
+           value="{{ old('tags', $article->tags->pluck('name')->implode(',')) }}"
     />
 </div>
 <div class="form-group form-check">
@@ -39,7 +39,7 @@
            class="form-check-input"
            id="published"
            name="published"
-           @if (old('published', isset($article) ? ($article->published ? 'on' : '') : '') === 'on')
+           @if (old('published', ($article->published ? 'on' : '')))
            checked
            @endif
     >
