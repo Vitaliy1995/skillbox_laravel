@@ -6,17 +6,16 @@ use App\Article;
 use App\Http\Requests\ArticlePostRequest;
 use App\Services\TagsSynchronizer;
 use App\Tag;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 
-class ArticleController extends Controller
+class AdminPostsController extends Controller
 {
     private $tagsSynchronizer;
 
     public function __construct(TagsSynchronizer $tagsSynchronizer)
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
-        $this->middleware('can:update,article')->except(['index', 'show', 'create', 'store']);
+        $this->middleware('auth');
+        $this->middleware('can:admin-panel');
 
         $this->tagsSynchronizer = $tagsSynchronizer;
     }
@@ -27,20 +26,12 @@ class ArticleController extends Controller
             ->latest("updated_at")
             ->get();
 
-        $articles = $articles->filter(function ($article) {
-            if (Gate::allows('update', [\auth()->user(), $article])) {
-                return true;
-            }
-
-            return $article->published === 1;
-        });
-
-        return view("index", compact('articles'));
+        return view("admin.posts.index", compact('articles'));
     }
 
     public function create()
     {
-        return view('posts.create');
+        return view('admin.posts.create');
     }
 
     public function store(ArticlePostRequest $request)
@@ -59,19 +50,17 @@ class ArticleController extends Controller
 
         flash('Статья создана успешно!');
 
-        return redirect(route('posts.index'));
+        return redirect(route('admin.posts.index'));
     }
 
     public function show(Article $article)
     {
-        return view("posts.detail", compact('article'));
+        return view("admin.posts.detail", compact('article'));
     }
 
     public function edit(Article $article)
     {
-        $this->authorize('update', $article);
-
-        return view("posts.edit", compact('article'));
+        return view("admin.posts.edit", compact('article'));
     }
 
     public function update(Article $article, ArticlePostRequest $request)
@@ -86,7 +75,7 @@ class ArticleController extends Controller
 
         flash('Статья успешно обновлена!');
 
-        return redirect(route('posts.index'));
+        return redirect(route('admin.posts.index'));
     }
 
     public function destroy(Article $article)
@@ -95,6 +84,6 @@ class ArticleController extends Controller
 
         flash('Статья успешно удалена!', 'warning');
 
-        return redirect(route('posts.index'));
+        return redirect(route('admin.posts.index'));
     }
 }

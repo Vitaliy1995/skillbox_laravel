@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class TreatmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['add']);
+        $this->middleware('can:admin-panel')->except(['add']);
+    }
+
     public function index()
     {
         $treatments = Treatment::latest('created_at')->get();

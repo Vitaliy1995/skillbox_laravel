@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -37,8 +38,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
     public static function admin()
     {
         return self::where('email', config('mail.admin_mail'))->first();
+    }
+
+    public function isAdmin()
+    {
+        return (bool)$this->belongsToMany(Role::class)
+            ->wherePivot('role_id', Role::ADMIN);
     }
 }

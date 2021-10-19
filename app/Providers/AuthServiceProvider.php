@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -27,8 +30,17 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         $gate->before(function ($user) {
-            if ($user->id === 1)
+            if ($user->isAdmin()) {
                 return true;
+            }
+        });
+
+        Gate::define('admin-panel', function (User $user) {
+            return $user->isAdmin();
+        });
+
+        Blade::if('admin', function () {
+            return Auth::check() && Auth::user()->isAdmin();
         });
     }
 }
