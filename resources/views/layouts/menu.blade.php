@@ -40,7 +40,10 @@
             <a class="p-2 text-muted" href="{{ route('posts.create') }}">Добавить статью</a>
             <a class="p-2 text-muted" href="{{ route('about') }}">О нас</a>
             <a class="p-2 text-muted" href="{{ route('contacts') }}">Контакты</a>
-            <a class="p-2 text-muted" href="{{ route('admin.feedback') }}">Обращения</a>
+            @admin
+                <a class="p-2 text-muted" href="{{ route('admin.feedback') }}">Обращения</a>
+                <a class="p-2 text-muted" href="{{ route('admin.posts.index') }}">Админка</a>
+            @endadmin
         </nav>
     </div>
 </div>

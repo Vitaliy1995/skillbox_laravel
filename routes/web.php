@@ -21,12 +21,16 @@ Route::resource('/posts', 'ArticleController')->parameters([
     'posts' => 'article'
 ]);
 
-Route::get('/admin/feedbacks', 'TreatmentController@index')->name('admin.feedback');
-
 Route::view('/about', 'about')->name('about');
 
 Route::view('/contacts', 'contacts')->name('contacts');
 
 Route::post('/contacts', 'TreatmentController@add')->name('contacts.add');
+
+Route::get('/admin/feedbacks', 'TreatmentController@index')->name('admin.feedback');
+
+Route::resource('/admin/posts', 'AdminPostsController')->parameters([
+    'posts' => 'article'
+])->names('admin.posts');
 
 Auth::routes();

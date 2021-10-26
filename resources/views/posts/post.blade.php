@@ -14,7 +14,11 @@
 
         @can('update', $article)
             <div class="position-absolute clearfix" style="top: 0;right: 0;">
-                <a href="{{ route('posts.edit', ['article' => $article->slug]) }}" class="btn btn-primary float-right m-2">Изменить</a>
+                @admin
+                    <a href="{{ route('admin.posts.edit', $article) }}" class="btn btn-primary float-right m-2">Изменить</a>
+                @else
+                    <a href="{{ route('posts.edit', $article) }}" class="btn btn-primary float-right m-2">Изменить</a>
+                @endadmin
             </div>
         @endcan
 
