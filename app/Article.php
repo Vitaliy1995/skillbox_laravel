@@ -19,6 +19,7 @@ class Article extends \Illuminate\Database\Eloquent\Model
 
         static::created(function ($article) {
             User::admin()->notify(new ArticleCreated($article));
+            app(\App\Services\Telegram::class)->sendMessage("Новая статья: " . route('posts.show', $article));
         });
 
         static::updated(function ($article) {
