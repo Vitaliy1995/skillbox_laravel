@@ -21,6 +21,8 @@ Route::resource('/posts', 'ArticleController')->parameters([
     'posts' => 'article'
 ]);
 
+Route::post('/posts/{article}/comment', 'CommentController@store')->name('comment.store');
+
 Route::view('/about', 'about')->name('about');
 
 Route::view('/contacts', 'contacts')->name('contacts');
