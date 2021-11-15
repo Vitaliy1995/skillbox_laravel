@@ -24,7 +24,7 @@ class AdminPostsController extends Controller
     {
         $articles = Article::with('tags')
             ->latest("updated_at")
-            ->get();
+            ->paginate(20);
 
         return view("admin.posts.index", compact('articles'));
     }
