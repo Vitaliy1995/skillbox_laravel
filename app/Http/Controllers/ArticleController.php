@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Http\Requests\ArticlePostRequest;
 use App\Services\TagsSynchronizer;
-use App\Tag;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class ArticleController extends Controller
@@ -25,15 +23,8 @@ class ArticleController extends Controller
     {
         $articles = Article::with('tags')
             ->latest("updated_at")
-            ->get();
-
-        $articles = $articles->filter(function ($article) {
-            if (Gate::allows('update', [\auth()->user(), $article])) {
-                return true;
-            }
-
-            return $article->published === 1;
-        });
+            ->where('published', true)
+            ->paginate(10);
 
         return view("index", compact('articles'));
     }

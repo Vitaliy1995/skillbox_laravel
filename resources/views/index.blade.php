@@ -22,13 +22,13 @@
 
             <a href="{{ route('posts.create') }}" class="btn btn-primary btn-lg btn-block mb-3">Добавить статью</a>
 
-            @if (count($articles) > 0)
-                @foreach($articles as $article)
-                    @include('posts.post')
-                @endforeach
-            @else
+            @forelse($articles as $article)
+                @include('posts.post')
+            @empty
                 <p>Нет активных статей</p>
-            @endif
+            @endforelse
+
+            {{ $articles->links() }}
 
         </div>
 
