@@ -53,4 +53,9 @@ class User extends Authenticatable
         return (bool)$this->belongsToMany(Role::class)
             ->wherePivot('role_id', Role::ADMIN);
     }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'owner_id');
+    }
 }

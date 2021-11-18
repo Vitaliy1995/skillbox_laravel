@@ -3,29 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-use App\Comment;
-use Illuminate\Http\Request;
+use App\Http\Requests\CommentRequest;
+use App\News;
+use App\Services\CommentSaver;
 
 class CommentController extends Controller
 {
-    public function __construct()
+    private $commentSaver;
+
+    public function __construct(CommentSaver $commentSaver)
     {
         $this->middleware('auth');
+
+        $this->commentSaver = $commentSaver;
     }
 
-    public function store(Article $article, Request $request)
+    public function storeArticle(Article $article, CommentRequest $request)
     {
-        $validatedData = $request->validate([
-            'comment' => 'min:5|max:3000|required'
-        ]);
+        return $this->commentSaver->save($article, $request);
+    }
 
-        $validatedData['owner_id'] = auth()->id();
-        $validatedData['article_id'] = $article->id;
-
-        Comment::create($validatedData);
-
-        flash('Комментарий успешно добавлен!');
-
-        return redirect(route('posts.show', ['article' => $article]));
+    public function storeNews(News $news, CommentRequest $request)
+    {
+        return $this->commentSaver->save($news, $request);
     }
 }

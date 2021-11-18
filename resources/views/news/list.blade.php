@@ -20,7 +20,7 @@
                 @endadmin
 
                 @forelse($allNews as $news)
-                    @include('news.news', ['short' => true])
+                    @include('news.news', ['short' => true, 'withoutComments' => true])
                 @empty
                     <p>На сайте нет новостей</p>
                 @endforelse

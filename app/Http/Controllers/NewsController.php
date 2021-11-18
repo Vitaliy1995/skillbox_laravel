@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewsRequest;
 use App\News;
+use App\Services\TagsSynchronizer;
 use Illuminate\Support\Facades\Route;
 
 class NewsController extends Controller
 {
-    public function __construct()
+    private $tagsSynchronizer;
+
+    public function __construct(TagsSynchronizer $tagsSynchronizer)
     {
         $this->middleware('auth', ['except' => ['index', 'show']]);
         $this->middleware('can:admin-panel')->except(['index', 'show']);
+
+        $this->tagsSynchronizer = $tagsSynchronizer;
     }
 
     public function index()
@@ -36,7 +41,9 @@ class NewsController extends Controller
             $validatedData['published'] = true;
         }
 
-        News::create($validatedData);
+        $news = News::create($validatedData);
+
+        $this->tagsSynchronizer->sync($news, \request('tags'));
 
         flash('Новость создана успешно!');
 
@@ -61,6 +68,8 @@ class NewsController extends Controller
         $validatedData['published'] = \request()->has('published');
 
         $news->update($validatedData);
+
+        $this->tagsSynchronizer->sync($news, \request('tags'));
 
         flash('Новость успешно обновлена!');
 
