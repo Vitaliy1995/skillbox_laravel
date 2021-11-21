@@ -11,12 +11,21 @@
     >
 </div>
 <div class="form-group">
-    <label for="annotation">Текст статьи</label>
+    <label for="annotation">Текст новости</label>
     <textarea class="form-control"
            id="description"
            name="description"
            required
     >{{ old('description', $news->description) }}</textarea>
+</div>
+<div class="form-group">
+    <label for="tags">Теги новости</label>
+    <input type="text"
+           name="tags"
+           id="tags"
+           class="form-control"
+           value="{{ old('tags', $news->tags->pluck('name')->implode(',')) }}"
+    />
 </div>
 <div class="form-group form-check">
     <input type="checkbox"

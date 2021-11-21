@@ -7,7 +7,7 @@
         @if ($article->tags->isNotEmpty())
             <div>
                 @foreach($article->tags as $tag)
-                    <a href="{{ route('posts.tags', ['tag' => $tag->getRouteKey()]) }}" class="btn btn-{{ \App\Bootstrap::getBootstrapClassByColor($tag->color) }} btn-sm">{{ $tag->name }}</a>
+                    <a href="{{ route('tags', ['tag' => $tag->getRouteKey()]) }}" class="btn btn-{{ \App\Bootstrap::getBootstrapClassByColor($tag->color) }} btn-sm">{{ $tag->name }}</a>
                 @endforeach
             </div>
         @endif

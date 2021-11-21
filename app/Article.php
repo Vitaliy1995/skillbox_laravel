@@ -5,12 +5,14 @@ namespace App;
 use App\Notifications\ArticleCreated;
 use App\Notifications\ArticleDeleted;
 use App\Notifications\ArticleEdited;
+use App\Services\Telegram;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 /**
  * @property mixed tags
  */
-class Article extends \Illuminate\Database\Eloquent\Model
+class Article extends Model implements ModelWithComments
 {
     public $fillable = ['slug', 'name', 'annotation', 'description', 'owner_id', 'published'];
 
@@ -24,7 +26,7 @@ class Article extends \Illuminate\Database\Eloquent\Model
 
         static::created(function (Article $article) {
             User::admin()->notify(new ArticleCreated($article));
-            app(\App\Services\Telegram::class)->sendMessage("Новая статья: " . route('posts.show', $article));
+            app(Telegram::class)->sendMessage("Новая статья: " . route('posts.show', $article));
         });
 
         static::updated(function (Article $article) {
@@ -53,12 +55,12 @@ class Article extends \Illuminate\Database\Eloquent\Model
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     public function owner()
