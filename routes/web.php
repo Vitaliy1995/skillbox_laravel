@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\AdminPageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,13 @@ Route::view('/contacts', 'contacts')->name('contacts');
 
 Route::post('/contacts', 'TreatmentController@add')->name('contacts.add');
 
+Route::view('/admin', 'admin.index')->name('admin');
+
+Route::view('/admin/reports', 'admin.reports.index')->name('admin.reports');
+
+Route::view('/admin/total', 'admin.reports.total')->name('admin.total');
+Route::post('/admin/total', 'AdminPageController@total')->name('admin.total.post');
+
 Route::get('/admin/feedbacks', 'TreatmentController@index')->name('admin.feedback');
 
 Route::resource('/admin/posts', 'AdminPostsController')->parameters([
@@ -43,77 +51,6 @@ Route::resource('/admin/posts', 'AdminPostsController')->parameters([
 
 Route::resource('/admin/news', 'NewsController')->names('admin.news');
 
-Route::get('/statistic', function () {
-    dump(\App\Article::count());
-
-    dump(\App\News::count());
-
-    dump(\App\User::withCount('articles')
-        ->orderBy('articles_count', 'desc')
-        ->first()
-        ->name);
-
-    dump(
-        DB::table('articles')
-            ->select(
-                'name',
-                DB::raw("CONCAT('http://localhost:8000/posts/', slug) as url"),
-                DB::raw("LENGTH(description) as length")
-            )
-            ->orderByDesc('length')
-            ->first()
-    );
-
-    dump(
-        DB::table('articles')
-            ->select(
-                'name',
-                DB::raw("CONCAT('http://localhost:8000/posts/', slug) as url"),
-                DB::raw("LENGTH(description) as length")
-            )
-            ->orderBy('length')
-            ->first()
-    );
-
-    $articleCounts = DB::table('articles')
-        ->select('owner_id', DB::raw("COUNT(articles.id) as articleCount"))
-        ->groupBy('owner_id');
-    dump(
-        DB::table('users')
-            ->joinSub($articleCounts, 'articles', function ($join) {
-                $join->on('users.id', '=', 'articles.owner_id');
-            })
-            ->avg("articleCount")
-    );
-
-    dump(
-        DB::table('articles')
-            ->leftJoin('article_histories', 'articles.id', '=', 'article_histories.article_id')
-            ->select(
-                'name',
-                DB::raw("CONCAT('http://localhost:8000/posts/', slug) as url"),
-                DB::raw("COUNT(article_histories.id) as articleChangeCounts")
-            )
-            ->groupBy('articles.id')
-            ->orderByDesc('articleChangeCounts')
-            ->first()
-    );
-
-    dump(
-        DB::table('articles')
-            ->leftJoin('comments', function ($join) {
-                $join->on('articles.id', '=', 'commentable_id')
-                    ->where('commentable_type', '=', \App\Article::class);
-            })
-            ->select(
-                'name',
-                DB::raw("CONCAT('http://localhost:8000/posts/', slug) as url"),
-                DB::raw("COUNT(comments.id) as commentsCounts")
-            )
-            ->groupBy('articles.id')
-            ->orderByDesc('commentsCounts')
-            ->first()
-    );
-});
+Route::get('/admin/statistic', 'AdminPageController@statistic')->name('admin.statistic');
 
 Auth::routes();

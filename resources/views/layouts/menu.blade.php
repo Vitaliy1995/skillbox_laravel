@@ -42,9 +42,8 @@
             <a class="p-2 text-muted" href="{{ route('about') }}">О нас</a>
             <a class="p-2 text-muted" href="{{ route('contacts') }}">Контакты</a>
             @admin
-                <a class="p-2 text-muted" href="{{ route('admin.feedback') }}">Обращения</a>
-                <a class="p-2 text-muted" href="{{ route('admin.posts.index') }}">Админка статей</a>
-                <a class="p-2 text-muted" href="{{ route('admin.news.index') }}">Админка новостей</a>
+                <a class="p-2 text-muted" href="{{ route('admin') }}">Админка</a>
+
             @endadmin
         </nav>
     </div>

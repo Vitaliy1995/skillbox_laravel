@@ -20,11 +20,11 @@ class CommentController extends Controller
 
     public function storeArticle(Article $article, CommentRequest $request)
     {
-        return $this->commentSaver->save($article, $request);
+        return $this->commentSaver->save($article, auth()->user(), $request->validated());
     }
 
     public function storeNews(News $news, CommentRequest $request)
     {
-        return $this->commentSaver->save($news, $request);
+        return $this->commentSaver->save($news, auth()->user(), $request->validated());
     }
 }

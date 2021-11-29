@@ -17,7 +17,7 @@ class TreatmentController extends Controller
     {
         $treatments = Treatment::latest('created_at')->get();
 
-        return view('admin.index', compact('treatments'));
+        return view('admin.treatment', compact('treatments'));
     }
 
     public function add()

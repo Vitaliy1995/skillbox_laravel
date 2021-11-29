@@ -5,17 +5,15 @@ namespace App\Services;
 
 
 use App\Comment;
-use App\Http\Requests\CommentRequest;
 use App\ModelWithComments;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class CommentSaver
 {
-    public function save(ModelWithComments $model, CommentRequest $request)
+    public function save(ModelWithComments $model, Authenticatable $user, $validatedData)
     {
-        $validatedData = $request->validated();
-
         $model->comments()->save(new Comment([
-            'owner_id' => auth()->id(),
+            'owner_id' => $user->id,
             'comment' => $validatedData['comment'],
         ]));
 
