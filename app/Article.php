@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Events\ArticleUpdate;
 use App\Notifications\ArticleCreated;
 use App\Notifications\ArticleDeleted;
 use App\Notifications\ArticleEdited;
@@ -18,6 +19,10 @@ class Article extends Model implements ModelWithComments
 
     protected $casts = [
         'published' => 'boolean'
+    ];
+
+    protected $dispatchesEvents = [
+        'updated' => ArticleUpdate::class
     ];
 
     protected static function boot()
