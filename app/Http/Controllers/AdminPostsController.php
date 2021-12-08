@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Http\Requests\ArticlePostRequest;
 use App\Services\TagsSynchronizer;
-use App\Tag;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AdminPostsController extends Controller
 {
@@ -22,9 +21,11 @@ class AdminPostsController extends Controller
 
     public function index()
     {
-        $articles = Article::with('tags')
-            ->latest("updated_at")
-            ->paginate(20);
+        $articles = Cache::tags(['articles', 'tags'])->remember('articlesAdminList|' . \request('page', 1), 3600, function () {
+            return Article::with('tags')
+                ->latest("updated_at")
+                ->paginate(20);
+        });
 
         return view("admin.posts.index", compact('articles'));
     }

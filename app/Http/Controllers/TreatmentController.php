@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Treatment;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class TreatmentController extends Controller
 {
@@ -15,7 +15,9 @@ class TreatmentController extends Controller
 
     public function index()
     {
-        $treatments = Treatment::latest('created_at')->get();
+        $treatments = Cache::tags('treatment')->remember('treatmentList', 3600, function () {
+            return Treatment::latest('created_at')->get();
+        });
 
         return view('admin.treatment', compact('treatments'));
     }

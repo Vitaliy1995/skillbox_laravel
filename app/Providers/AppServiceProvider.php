@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Tag;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,7 +16,10 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         view()->composer('layouts.right_menu', function ($view) {
-            $view->with('tagsCloud', Tag::tagsCloud());
+            $tagsCloud = Cache::tags('tags')->remember('tagsCloud', 3600, function () {
+                return Tag::tagsCloud();
+            });
+            $view->with('tagsCloud', $tagsCloud);
         });
     }
 

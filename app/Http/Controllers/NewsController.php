@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\NewsRequest;
 use App\News;
 use App\Services\TagsSynchronizer;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 class NewsController extends Controller
@@ -21,9 +22,15 @@ class NewsController extends Controller
 
     public function index()
     {
-        $allNews = Route::currentRouteName() === "admin.news.index"
-            ? News::paginate(20)
-            : News::where('published', true)->paginate(10);
+        $isAdmin = Route::currentRouteName() === "admin.news.index";
+
+        $allNews = Cache::tags(['news', 'tags'])
+            ->remember('newsList' . ($isAdmin ? 'Admin' : '') . '|' . request('page', 1), 3600, function () {
+                return Route::currentRouteName() === "admin.news.index"
+                    ? News::paginate(20)
+                    : News::where('published', true)->paginate(10);
+                }
+            );
 
         return view('news.list', compact('allNews'));
     }

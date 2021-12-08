@@ -9,6 +9,7 @@ use App\Notifications\ArticleEdited;
 use App\Services\Telegram;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * @property mixed tags
@@ -32,6 +33,8 @@ class Article extends Model implements ModelWithComments
         static::created(function (Article $article) {
             User::admin()->notify(new ArticleCreated($article));
             app(Telegram::class)->sendMessage("Новая статья: " . route('posts.show', $article));
+
+            Cache::tags(['articles', 'tags'])->flush();
         });
 
         static::updated(function (Article $article) {
@@ -46,10 +49,14 @@ class Article extends Model implements ModelWithComments
                 )),
                 'changes->after' => json_encode($after)
             ]);
+
+            Cache::tags(['articles', 'tags'])->flush();
         });
 
         static::deleted(function (Article $article) {
             User::admin()->notify(new ArticleDeleted($article));
+
+            Cache::tags('articles')->flush();
         });
     }
 
