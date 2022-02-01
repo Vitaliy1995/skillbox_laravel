@@ -23,7 +23,7 @@ class ArticleUpdate implements ShouldBroadcast
     {
         $this->name = $article->name;
         $this->changes = json_encode($article->getDirty());
-        $this->link = route('post.show', $article);
+        $this->link = route('posts.show', $article);
     }
 
     public function broadcastOn()

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Http\Requests\ArticlePostRequest;
 use App\Services\TagsSynchronizer;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cache;
 
 class ArticleController extends Controller
 {
@@ -21,10 +21,12 @@ class ArticleController extends Controller
 
     public function index()
     {
-        $articles = Article::with('tags')
-            ->latest("updated_at")
-            ->where('published', true)
-            ->paginate(10);
+        $articles = Cache::tags(['articles', 'tags'])->remember('articlesList|' . request('page', 1), 3600, function () {
+            return Article::with('tags')
+                ->latest("updated_at")
+                ->where('published', true)
+                ->paginate(10);
+        });
 
         return view("index", compact('articles'));
     }
